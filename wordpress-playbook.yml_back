@@ -1,0 +1,69 @@
+---
+- name: wordpess-playbook
+  hosts: wordpress
+  remote_user: root
+  tasks:
+   - name: Install Apache & PHP & MySQL
+     yum: 
+      name: 
+       - httpd
+       - mariadb
+       - mariadb-server
+       - php
+       - php-common
+       - php-mysql
+       - php-gd
+       - php-xml
+       - php-mbstring
+       - php-mcrypt
+       - php-xmlrpc
+       - unzip
+       - wget
+       - python-setuptools
+       - python-pip
+      state: present
+   
+   - name: Start Apache Web Server
+     service:
+      name: httpd
+      state: started 
+      enabled: yes
+
+
+   - name: Install PyMySQL
+     pip:
+      name: 
+       - setuptools
+       - pymysql
+      state: present
+
+   - name: Start MariaDB
+     service:
+      name: mariadb
+      state: started
+      enabled: yes
+
+   - name: Open 3306 PORT
+     firewalld:
+      port: 3306/tcp
+      permanent: yes
+      state: enabled
+
+   - name: Flush MariaDB Privilleges
+     mysql_user:
+      name: root
+      login_user: root
+      login_password: abc
+      priv: "DELETE FROM mysql.user WHERE User='';" 
+      
+ 
+   - name: Open Firewall PORT 80
+     firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+
+
+
+
+
