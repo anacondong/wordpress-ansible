@@ -3,4 +3,19 @@
   hosts: wordpress
   remote_user: root
   tasks:
-   - ping:
+   - name: Install Apache Webserver
+     yum: 
+      name: httpd
+      state: present
+   
+   - name: Start Apache Web Server
+     service:
+      name: httpd
+      state: started 
+      enabled: yes
+ 
+   - name: Open Firewall PORT 80
+     firewalld:
+      service: httpd
+      permanent: yes
+      state: enabled 
