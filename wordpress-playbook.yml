@@ -1,0 +1,6 @@
+---
+- name: wordpess-playbook
+  hosts: wordpress
+  remote_user: root
+  tasks:
+   - ping:
